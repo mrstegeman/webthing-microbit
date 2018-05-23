@@ -1,0 +1,28 @@
+{
+  "name": "webthing-microbit",
+  "version": "0.1.0",
+  "description": "Turn the micro:bit into a webthing",
+  "main": "server.js",
+  "dependencies": {
+    "bbc-microbit": "^0.2.0",
+    "webthing": "^0.6.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrstegeman/webthing-microbit.git"
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mrstegeman/webthing-microbit/issues"
+  },
+  "homepage": "https://github.com/mrstegeman/webthing-microbit#readme"
+}
