@@ -122,6 +122,12 @@ function run_server(microbit) {
     });
   thing.addProperty(ledTextProperty);
 
+  microbit.ledLoop = null;
+  function loopDisplay() {
+    const value = ledTextProperty.getValue();
+    ledTextProperty.setValue(value);
+  }
+
   const ledScrollDelayProperty = new Property(
     thing,
     'ledScrollDelay',
@@ -138,6 +144,24 @@ function run_server(microbit) {
       unit: 'millisecond',
     });
   thing.addProperty(ledScrollDelayProperty);
+
+  const ledLoopProperty = new Property(
+    thing,
+    'ledLoop',
+    new Value(false, (value) => {
+      if (value) {
+        const delay = ledScrollDelayProperty.getValue() *
+          ledTextProperty.getValue().length;
+        microbit.ledLoop = setInterval(loopDisplay, delay);
+      } else if (microbit.ledLoop !== null) {
+        clearInterval(microbit.ledLoop);
+        microbit.ledLoop = null;
+      }
+    }),
+    {
+      type: 'boolean',
+    });
+  thing.addProperty(ledLoopProperty);
 
   microbit.connectAndSetUp((error) => {
     if (error) {
@@ -243,8 +267,10 @@ function run_server(microbit) {
     type: 'integer',
   });
 
-  const server = new WebThingServer(new SingleThing(thing), 8888);
-  server.start();
+  setTimeout(() => {
+    const server = new WebThingServer(new SingleThing(thing), 8888);
+    server.start();
+  }, 5000);
 }
 
 BBCMicrobit.discover(run_server);
