@@ -17,7 +17,7 @@ function run_server(microbit) {
     console.log('Disconnected!');
   });
 
-  const thing = new Thing('microbit', 'thing', 'A WoT-connected micro:bit');
+  const thing = new Thing('microbit', [], 'A WoT-connected micro:bit');
 
   const temperatureProperty = new Property(
     thing,
@@ -26,6 +26,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'celsius',
+      label: 'Temperature',
       description: 'An ambient temperature sensor',
     });
   thing.addProperty(temperatureProperty);
@@ -37,6 +38,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'G',
+      label: 'Accelerometer (X)',
       description: 'Accelerometer reading, X direction',
     });
   thing.addProperty(accelerometerXProperty);
@@ -48,6 +50,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'G',
+      label: 'Accelerometer (Y)',
       description: 'Accelerometer reading, Y direction',
     });
   thing.addProperty(accelerometerYProperty);
@@ -59,6 +62,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'G',
+      label: 'Accelerometer (Z)',
       description: 'Accelerometer reading, Z direction',
     });
   thing.addProperty(accelerometerZProperty);
@@ -70,6 +74,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'microtesla',
+      label: 'Magnetometer (X)',
       description: 'Magnetometer reading, X direction',
     });
   thing.addProperty(magnetometerXProperty);
@@ -81,6 +86,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'microtesla',
+      label: 'Magnetometer (Y)',
       description: 'Magnetometer reading, Y direction',
     });
   thing.addProperty(magnetometerYProperty);
@@ -92,6 +98,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'microtesla',
+      label: 'Magnetometer (Z)',
       description: 'Magnetometer reading, Z direction',
     });
   thing.addProperty(magnetometerZProperty);
@@ -103,6 +110,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'radian',
+      label: 'Magnetometer Bearing',
       description: 'Magnetometer bearing',
     });
   thing.addProperty(magnetometerBearingProperty);
@@ -119,6 +127,8 @@ function run_server(microbit) {
     }),
     {
       type: 'string',
+      label: 'LED Text',
+      description: 'Test displayed on LED',
     });
   thing.addProperty(ledTextProperty);
 
@@ -142,6 +152,8 @@ function run_server(microbit) {
       type: 'number',
       minimum: 0,
       unit: 'millisecond',
+      label: 'LED Scroll Delay',
+      description: 'LED scroll delay',
     });
   thing.addProperty(ledScrollDelayProperty);
 
@@ -160,6 +172,8 @@ function run_server(microbit) {
     }),
     {
       type: 'boolean',
+      label: 'Loop Text',
+      description: 'Whether or not to loop LED text',
     });
   thing.addProperty(ledLoopProperty);
 
