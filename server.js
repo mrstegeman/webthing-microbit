@@ -35,7 +35,8 @@ function run_server(microbit) {
       label: 'Temperature',
       description: 'An ambient temperature sensor',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(temperatureProperty);
 
   const accelerometerXProperty = new Property(
@@ -48,7 +49,8 @@ function run_server(microbit) {
       label: 'Accelerometer (X)',
       description: 'Accelerometer reading, X direction',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(accelerometerXProperty);
 
   const accelerometerYProperty = new Property(
@@ -61,7 +63,8 @@ function run_server(microbit) {
       label: 'Accelerometer (Y)',
       description: 'Accelerometer reading, Y direction',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(accelerometerYProperty);
 
   const accelerometerZProperty = new Property(
@@ -74,7 +77,8 @@ function run_server(microbit) {
       label: 'Accelerometer (Z)',
       description: 'Accelerometer reading, Z direction',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(accelerometerZProperty);
 
   const magnetometerXProperty = new Property(
@@ -87,7 +91,8 @@ function run_server(microbit) {
       label: 'Magnetometer (X)',
       description: 'Magnetometer reading, X direction',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(magnetometerXProperty);
 
   const magnetometerYProperty = new Property(
@@ -100,7 +105,8 @@ function run_server(microbit) {
       label: 'Magnetometer (Y)',
       description: 'Magnetometer reading, Y direction',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(magnetometerYProperty);
 
   const magnetometerZProperty = new Property(
@@ -113,7 +119,8 @@ function run_server(microbit) {
       label: 'Magnetometer (Z)',
       description: 'Magnetometer reading, Z direction',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(magnetometerZProperty);
 
   const magnetometerBearingProperty = new Property(
@@ -126,7 +133,8 @@ function run_server(microbit) {
       label: 'Magnetometer Bearing',
       description: 'Magnetometer bearing',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(magnetometerBearingProperty);
 
   const ledTextProperty = new Property(
@@ -143,7 +151,8 @@ function run_server(microbit) {
       type: 'string',
       label: 'LED Text',
       description: 'Test displayed on LED',
-    });
+    }
+  );
   thing.addProperty(ledTextProperty);
 
   microbit.ledLoop = null;
@@ -168,7 +177,8 @@ function run_server(microbit) {
       unit: 'millisecond',
       label: 'LED Scroll Delay',
       description: 'LED scroll delay',
-    });
+    }
+  );
   thing.addProperty(ledScrollDelayProperty);
 
   const ledLoopProperty = new Property(
@@ -189,7 +199,8 @@ function run_server(microbit) {
       type: 'boolean',
       label: 'Loop Text',
       description: 'Whether or not to loop LED text',
-    });
+    }
+  );
   thing.addProperty(ledLoopProperty);
 
   const buttonAProperty = new Property(
@@ -201,7 +212,8 @@ function run_server(microbit) {
       type: 'boolean',
       label: 'Button A',
       description: 'State of button A',
-    });
+    }
+  );
   thing.addProperty(buttonAProperty);
 
   const buttonBProperty = new Property(
@@ -213,7 +225,8 @@ function run_server(microbit) {
       type: 'boolean',
       label: 'Button B',
       description: 'State of button B',
-    });
+    }
+  );
   thing.addProperty(buttonBProperty);
 
   microbit.connectAndSetUp((error) => {
@@ -307,10 +320,11 @@ function run_server(microbit) {
           break;
         case 1:
           buttonAProperty.value.notifyOfExternalUpdate(true);
+          thing.addEvent(new Event(thing, 'buttonAPressed'));
           break;
         case 2:
           buttonAProperty.value.notifyOfExternalUpdate(true);
-          thing.addEvent(new Event(thing, 'buttonALongPress'));
+          thing.addEvent(new Event(thing, 'buttonALongPressed'));
           break;
       }
     });
@@ -322,20 +336,31 @@ function run_server(microbit) {
           break;
         case 1:
           buttonBProperty.value.notifyOfExternalUpdate(true);
+          thing.addEvent(new Event(thing, 'buttonBPressed'));
           break;
         case 2:
           buttonBProperty.value.notifyOfExternalUpdate(true);
-          thing.addEvent(new Event(thing, 'buttonBLongPress'));
+          thing.addEvent(new Event(thing, 'buttonBLongPressed'));
           break;
       }
     });
   });
 
-  thing.addAvailableEvent('buttonALongPress', {
-    description: 'Button A long press',
+  thing.addAvailableEvent('buttonAPressed', {
+    description: 'Button A pressed',
+    '@type': 'PressedEvent',
   });
-  thing.addAvailableEvent('buttonBLongPress', {
-    description: 'Button B long press',
+  thing.addAvailableEvent('buttonALongPressed', {
+    description: 'Button A long pressed',
+    '@type': 'LongPressedEvent',
+  });
+  thing.addAvailableEvent('buttonBPressed', {
+    description: 'Button B pressed',
+    '@type': 'PressedEvent',
+  });
+  thing.addAvailableEvent('buttonBLongPressed', {
+    description: 'Button B long pressed',
+    '@type': 'LongPressedEvent',
   });
 
   setTimeout(() => {
