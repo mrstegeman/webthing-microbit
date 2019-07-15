@@ -1,18 +1,18 @@
 {
   "name": "webthing-microbit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Turn the micro:bit into a webthing",
   "main": "server.js",
   "dependencies": {
     "bbc-microbit": "^0.2.0",
-    "webthing": "^0.8.3"
+    "webthing": "^0.12.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.7.0"
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "start": "node server.js"
   },
   "repository": {
