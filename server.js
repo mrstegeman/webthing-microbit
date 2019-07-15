@@ -18,8 +18,10 @@ function run_server(microbit) {
   });
 
   const thing = new Thing(
+    `urn:dev:micro:bit:${microbit.id}`,
     'micro:bit',
     [
+      'TemperatureSensor',
       'PushButton',
     ],
     'A WoT-connected micro:bit'
@@ -30,9 +32,10 @@ function run_server(microbit) {
     'temperature',
     new Value(0),
     {
-      type: 'number',
+      '@type': 'TemperatureProperty',
+      type: 'integer',
       unit: 'degree celsius',
-      label: 'Temperature',
+      title: 'Temperature',
       description: 'An ambient temperature sensor',
       readOnly: true,
     }
@@ -46,7 +49,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'G',
-      label: 'Accelerometer (X)',
+      title: 'Accelerometer (X)',
       description: 'Accelerometer reading, X direction',
       readOnly: true,
     }
@@ -60,7 +63,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'G',
-      label: 'Accelerometer (Y)',
+      title: 'Accelerometer (Y)',
       description: 'Accelerometer reading, Y direction',
       readOnly: true,
     }
@@ -74,7 +77,7 @@ function run_server(microbit) {
     {
       type: 'number',
       unit: 'G',
-      label: 'Accelerometer (Z)',
+      title: 'Accelerometer (Z)',
       description: 'Accelerometer reading, Z direction',
       readOnly: true,
     }
@@ -87,8 +90,8 @@ function run_server(microbit) {
     new Value(0),
     {
       type: 'number',
-      unit: 'microtesla',
-      label: 'Magnetometer (X)',
+      unit: 'µT',
+      title: 'Magnetometer (X)',
       description: 'Magnetometer reading, X direction',
       readOnly: true,
     }
@@ -101,8 +104,8 @@ function run_server(microbit) {
     new Value(0),
     {
       type: 'number',
-      unit: 'microtesla',
-      label: 'Magnetometer (Y)',
+      unit: 'µT',
+      title: 'Magnetometer (Y)',
       description: 'Magnetometer reading, Y direction',
       readOnly: true,
     }
@@ -115,8 +118,8 @@ function run_server(microbit) {
     new Value(0),
     {
       type: 'number',
-      unit: 'microtesla',
-      label: 'Magnetometer (Z)',
+      unit: 'µT',
+      title: 'Magnetometer (Z)',
       description: 'Magnetometer reading, Z direction',
       readOnly: true,
     }
@@ -128,9 +131,9 @@ function run_server(microbit) {
     'magnetometerBearing',
     new Value(0),
     {
-      type: 'number',
+      type: 'integer',
       unit: 'radian',
-      label: 'Magnetometer Bearing',
+      title: 'Magnetometer Bearing',
       description: 'Magnetometer bearing',
       readOnly: true,
     }
@@ -149,8 +152,8 @@ function run_server(microbit) {
     }),
     {
       type: 'string',
-      label: 'LED Text',
-      description: 'Test displayed on LED',
+      title: 'LED Text',
+      description: 'Text displayed on LED',
     }
   );
   thing.addProperty(ledTextProperty);
@@ -175,7 +178,7 @@ function run_server(microbit) {
       type: 'number',
       minimum: 0,
       unit: 'millisecond',
-      label: 'LED Scroll Delay',
+      title: 'LED Scroll Delay',
       description: 'LED scroll delay',
     }
   );
@@ -197,7 +200,7 @@ function run_server(microbit) {
     {
       '@type': 'BooleanProperty',
       type: 'boolean',
-      label: 'Loop Text',
+      title: 'Loop Text',
       description: 'Whether or not to loop LED text',
     }
   );
@@ -210,7 +213,7 @@ function run_server(microbit) {
     {
       '@type': 'PushedProperty',
       type: 'boolean',
-      label: 'Button A',
+      title: 'Button A',
       description: 'State of button A',
     }
   );
@@ -223,7 +226,7 @@ function run_server(microbit) {
     {
       '@type': 'PushedProperty',
       type: 'boolean',
-      label: 'Button B',
+      title: 'Button B',
       description: 'State of button B',
     }
   );
@@ -244,31 +247,19 @@ function run_server(microbit) {
       ledScrollDelayProperty.value.notifyOfExternalUpdate(delay);
     });
 
+    microbit.on('temperatureChange', (value) => {
+      temperatureProperty.value.notifyOfExternalUpdate(parseInt(value));
+    });
+
     microbit.writeTemperaturePeriod(1000, (error) => {
       if (error) {
         console.log('Failed to configure temperature sensor:', error);
-      }
-    });
-
-    microbit.subscribeTemperature((error) => {
-      if (error) {
-        console.log('Failed to subscribe to temperature updates:', error);
-      }
-    });
-
-    microbit.on('temperatureChange', (value) => {
-      temperatureProperty.value.notifyOfExternalUpdate(value);
-    });
-
-    microbit.writeAccelerometerPeriod(640, (error) => {
-      if (error) {
-        console.log('Failed to configure accelerometer:', error);
-      }
-    });
-
-    microbit.subscribeAccelerometer((error) => {
-      if (error) {
-        console.log('Failed to subscribe to accelerometer updates:', error);
+      } else {
+        microbit.subscribeTemperature((error) => {
+          if (error) {
+            console.log('Failed to subscribe to temperature updates:', error);
+          }
+        });
       }
     });
 
@@ -278,22 +269,15 @@ function run_server(microbit) {
       accelerometerZProperty.value.notifyOfExternalUpdate(z);
     });
 
-    microbit.writeMagnetometerPeriod(640, (error) => {
+    microbit.writeAccelerometerPeriod(640, (error) => {
       if (error) {
-        console.log('Failed to configure magnetometer:', error);
-      }
-    });
-
-    microbit.subscribeMagnetometer((error) => {
-      if (error) {
-        console.log('Failed to subscribe to magnetometer updates:', error);
-      }
-    });
-
-    microbit.subscribeMagnetometerBearing((error) => {
-      if (error) {
-        console.log('Failed to subscribe to magnetometer bearing updates:',
-                    error);
+        console.log('Failed to configure accelerometer:', error);
+      } else {
+        microbit.subscribeAccelerometer((error) => {
+          if (error) {
+            console.log('Failed to subscribe to accelerometer updates:', error);
+          }
+        });
       }
     });
 
@@ -304,7 +288,28 @@ function run_server(microbit) {
     });
 
     microbit.on('magnetometerBearingChange', (bearing) => {
-      magnetometerBearingProperty.value.notifyOfExternalUpdate(bearing);
+      magnetometerBearingProperty.value.notifyOfExternalUpdate(
+        parseInt(bearing)
+      );
+    });
+
+    microbit.writeMagnetometerPeriod(640, (error) => {
+      if (error) {
+        console.log('Failed to configure magnetometer:', error);
+      } else {
+        microbit.subscribeMagnetometer((error) => {
+          if (error) {
+            console.log('Failed to subscribe to magnetometer updates:', error);
+          }
+        });
+
+        microbit.subscribeMagnetometerBearing((error) => {
+          if (error) {
+            console.log('Failed to subscribe to magnetometer bearing updates:',
+                        error);
+          }
+        });
+      }
     });
 
     microbit.subscribeButtons((error) => {
