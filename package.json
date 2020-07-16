@@ -5,11 +5,11 @@
   "main": "server.js",
   "dependencies": {
     "bbc-microbit": "^0.2.0",
-    "webthing": "^0.12.0"
+    "webthing": "^0.12.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0"
+    "eslint": "^7.4.0"
   },
   "scripts": {
     "lint": "eslint .",
